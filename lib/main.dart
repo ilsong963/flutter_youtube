@@ -19,26 +19,38 @@ class DemoApp extends StatefulWidget {
 
 class _DemoAppState extends State<DemoApp> {
   static String key = "AIzaSyCoHKFaTeaTgeZvbSI9UexIVlWZcH-HYhc";
-
+  final FocusNode textfield = FocusNode();
   YoutubeAPI ytApi = YoutubeAPI(key, type: "playlist");
   List<YT_API> ytResult = [];
   bool isclick = false;
+  bool isLoading = false;
   final searchController = TextEditingController();
 
   callAPI() async {
     String query = "Java";
+
+    setState(() {
+      isLoading = true;
+    });
+    isLoading = true;
     ytResult = await ytApi.search(query);
     ytResult = await ytApi.nextPage();
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void searchYoutube(String query) async {
     print(query);
+    setState(() {
+      isLoading = true;
+    });
     ytResult = await ytApi.search(query);
     ytResult = await ytApi.nextPage();
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
-
 
   @override
   void initState() {
@@ -53,30 +65,40 @@ class _DemoAppState extends State<DemoApp> {
         title: Text("Youtube"),
         backgroundColor: Colors.red,
         actions: <Widget>[
-          new IconButton(icon: new Icon( Icons.search), onPressed: ()async { searchYoutube(searchController.text);}),
+          new IconButton(
+              icon: new Icon(Icons.search),
+              onPressed: () async {
+                searchYoutube(searchController.text);
+              }),
           Container(
               padding: const EdgeInsets.all(8.0),
               width: 150, // do it in both Container
-            child: TextField( onChanged: (text) { setState(() {  }); },
-            controller: searchController,)
-          ),
-
-
+              child: TextFormField(
+                focusNode: textfield,
+                onFieldSubmitted: (value) {
+                  textfield.unfocus();
+                  searchYoutube(searchController.text);
+                  searchController.text = '';
+                },
+                textInputAction: TextInputAction.next,
+                onChanged: (text) {
+                  setState(() {});
+                },
+                controller: searchController,
+              )),
         ],
-
       ),
-      body: Container(
+      body: !isLoading ? Container(
         child: ListView.builder(
           itemCount: ytResult.length,
           itemBuilder: (_, int index) => listItem(index),
         ),
-      ),
+      ) : Center(child : CircularProgressIndicator())
     );
   }
-  void search(){
 
-}
   Widget listItem(index) {
+
     return Card(
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 7.0),
@@ -92,17 +114,17 @@ class _DemoAppState extends State<DemoApp> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        ytResult[index].title,
-                        softWrap: true,
-                        style: TextStyle(fontSize: 18.0),
-                      ),
-                      Padding(padding: EdgeInsets.only(bottom: 1.5)),
-                      Text(
-                        ytResult[index].channelTitle,
-                        softWrap: true,
-                      ),
-                    ]))
+                  Text(
+                    ytResult[index].title,
+                    softWrap: true,
+                    style: TextStyle(fontSize: 18.0),
+                  ),
+                  Padding(padding: EdgeInsets.only(bottom: 1.5)),
+                  Text(
+                    ytResult[index].channelTitle,
+                    softWrap: true,
+                  ),
+                ]))
           ],
         ),
       ),
