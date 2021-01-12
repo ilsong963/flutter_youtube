@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_api/youtube_api.dart';
 
-class MyApp extends StatelessWidget {
+class videolist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: DemoApp(),
+      routes: <String, WidgetBuilder>{
+      '/settings': (BuildContext context) => new listview(),
+    },
+      home: listview(),
     );
   }
 }
 
-class DemoApp extends StatefulWidget {
+class listview extends StatefulWidget {
   @override
-  _DemoAppState createState() => _DemoAppState();
+  _listview createState() => _listview();
 }
 
-class _DemoAppState extends State<DemoApp> {
+class _listview extends State<listview> {
   static String key = "AIzaSyCoHKFaTeaTgeZvbSI9UexIVlWZcH-HYhc";
   final FocusNode textfield = FocusNode();
   YoutubeAPI ytApi = YoutubeAPI(key, type: "playlist");
@@ -91,12 +94,13 @@ class _DemoAppState extends State<DemoApp> {
           itemCount: ytResult.length,
           itemBuilder: (_, int index) => listItem(index),
         ),
-      ) : Center(child : CircularProgressIndicator())
+      ) : Center(child : CircularProgressIndicator(
+        valueColor:
+        new AlwaysStoppedAnimation<Color>(Colors.red),))
     );
   }
 
   Widget listItem(index) {
-
     return Card(
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 7.0),
