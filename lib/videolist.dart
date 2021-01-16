@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_api/youtube_api.dart';
+import 'playview.dart';
 
 class videolist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: <String, WidgetBuilder>{
-      '/settings': (BuildContext context) => new listview(),
-    },
+        '/settings': (BuildContext context) => new listview(),
+      },
       home: listview(),
     );
   }
@@ -21,7 +23,7 @@ class listview extends StatefulWidget {
 class _listview extends State<listview> {
   static String key = "AIzaSyCoHKFaTeaTgeZvbSI9UexIVlWZcH-HYhc";
   final FocusNode textfield = FocusNode();
-  YoutubeAPI ytApi = YoutubeAPI(key, type: "playlist");
+  YoutubeAPI ytApi = YoutubeAPI(key, type: "video");
   List<YT_API> ytResult = [];
   bool isclick = false;
   bool isLoading = false;
@@ -62,46 +64,56 @@ class _listview extends State<listview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Youtube"),
-        backgroundColor: Colors.red,
-        actions: <Widget>[
-          new IconButton(
-              icon: new Icon(Icons.search),
-              onPressed: () async {
-                searchYoutube(searchController.text);
-              }),
-          Container(
-              padding: const EdgeInsets.all(8.0),
-              width: 150, // do it in both Container
-              child: TextFormField(
-                focusNode: textfield,
-                onFieldSubmitted: (value) {
-                  textfield.unfocus();
+        appBar: AppBar(
+          title: Text("Youtube"),
+          backgroundColor: Colors.red,
+          actions: <Widget>[
+            new IconButton(
+                icon: new Icon(Icons.search),
+                onPressed: () async {
                   searchYoutube(searchController.text);
-                  searchController.text = '';
-                },
-                textInputAction: TextInputAction.next,
-                onChanged: (text) {
-                  setState(() {});
-                },
-                controller: searchController,
-              )),
-        ],
-      ),
-      body: !isLoading ? Container(
-        child: ListView.builder(
-          itemCount: ytResult.length,
-          itemBuilder: (_, int index) => listItem(index),
+                }),
+            Container(
+                padding: const EdgeInsets.all(8.0),
+                width: 150, // do it in both Container
+                child: TextFormField(
+                  focusNode: textfield,
+                  onFieldSubmitted: (value) {
+                    textfield.unfocus();
+                    searchYoutube(searchController.text);
+                    searchController.text = '';
+                  },
+                  textInputAction: TextInputAction.next,
+                  onChanged: (text) {
+                    setState(() {});
+                  },
+                  controller: searchController,
+                )),
+          ],
         ),
-      ) : Center(child : CircularProgressIndicator(
-        valueColor:
-        new AlwaysStoppedAnimation<Color>(Colors.red),))
-    );
+        body: !isLoading
+            ? Container(
+                child: ListView.builder(
+                  itemCount: ytResult.length,
+                  itemBuilder: (_, int index) => listItem(index),
+                ),
+              )
+            : Center(
+                child: CircularProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+              )));
   }
 
   Widget listItem(index) {
     return Card(
+        child: new InkWell(
+      onTap: () {
+        print("!111"+ytResult[index].id);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => YoutubeApp(url : ytResult[index].id)),
+          );
+      },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 7.0),
         padding: EdgeInsets.all(12.0),
@@ -130,6 +142,6 @@ class _listview extends State<listview> {
           ],
         ),
       ),
-    );
+    ));
   }
 }

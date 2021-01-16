@@ -24,6 +24,9 @@ dependencies:
   flutter:
     sdk: flutter
   youtube_api: ^0.8.0
+  youtube_player_iframe: ^1.2.0+2
+
+  url_launcher: ^5.7.10
 
 
   # The following adds the Cupertino Icons font to your application.
