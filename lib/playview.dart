@@ -26,30 +26,30 @@ class YoutubeApp extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.deepPurpleAccent),
       ),
       debugShowCheckedModeBanner: false,
-      home: YoutubeAppDemo(),
+      home: YoutubeAppDemo(url: url),
     );
   }
 }
 
 ///
 class YoutubeAppDemo extends StatefulWidget {
-  @override
+  final String url;
+  const YoutubeAppDemo ({ Key key, this.url }): super(key: key);
+
+@override
   _YoutubeAppDemoState createState() => _YoutubeAppDemoState();
 }
 
 class _YoutubeAppDemoState extends State<YoutubeAppDemo> {
   YoutubePlayerController _controller;
 
+
   @override
   void initState() {
     super.initState();
     _controller = YoutubePlayerController(
-      initialVideoId: 'tcodrIK2P_I',
-      params: const YoutubePlayerParams(
-        playlist: [
-          '34_PXCzGw1M',
-        ],
-        startAt: const Duration(minutes: 1, seconds: 36),
+      initialVideoId: widget.url,
+      params: YoutubePlayerParams(
         showControls: true,
         showFullscreenButton: true,
         desktopMode: true,
