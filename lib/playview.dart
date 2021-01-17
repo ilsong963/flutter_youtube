@@ -8,17 +8,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'videolist.dart';
 
 ///
 class YoutubeApp extends StatelessWidget {
-  final String url;
-
-  // 생성자는 Todo를 인자로 받습니다.
-  YoutubeApp({Key key, @required this.url}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print("!!!"+url);
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+
+    if (arguments != null) print(arguments['exampleArgument']);
+
+    print("!!!"+arguments['exampleArgument']);
     return MaterialApp(
       title: 'Youtube Player IFrame Demo',
       theme: ThemeData(
@@ -26,7 +27,7 @@ class YoutubeApp extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.deepPurpleAccent),
       ),
       debugShowCheckedModeBanner: false,
-      home: YoutubeAppDemo(url: url),
+      home: YoutubeAppDemo(url: arguments['exampleArgument']),
     );
   }
 }
@@ -107,7 +108,8 @@ class _YoutubeAppDemoState extends State<YoutubeAppDemo> {
                 const Controls(),
                 RaisedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pushNamed(
+                        context,'/list');
                   },
                 )
               ],

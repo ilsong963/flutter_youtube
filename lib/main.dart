@@ -16,8 +16,9 @@ class _FirstRoute extends State<FirstRoute> {
   void initState() {
     super.initState();
     new Future.delayed(const Duration(seconds: 3), () {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => videolist()));
+      Navigator.pushNamed(
+          context,'/list');
+
     });
   }
 

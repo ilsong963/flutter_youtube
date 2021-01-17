@@ -7,9 +7,6 @@ class videolist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: <String, WidgetBuilder>{
-        '/settings': (BuildContext context) => new listview(),
-      },
       home: listview(),
     );
   }
@@ -21,6 +18,7 @@ class listview extends StatefulWidget {
 }
 
 class _listview extends State<listview> {
+
   static String key = "AIzaSyCoHKFaTeaTgeZvbSI9UexIVlWZcH-HYhc";
   final FocusNode textfield = FocusNode();
   YoutubeAPI ytApi = YoutubeAPI(key, type: "video");
@@ -63,6 +61,7 @@ class _listview extends State<listview> {
 
   @override
   Widget build(BuildContext context) {
+    final YoutubeApp args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
         appBar: AppBar(
           title: Text("Youtube"),
@@ -109,10 +108,12 @@ class _listview extends State<listview> {
         child: new InkWell(
       onTap: () {
         print("!111"+ytResult[index].id);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => YoutubeApp(url : ytResult[index].id)),
-          );
+
+
+        Navigator.pushNamed(
+            context,'/view',arguments:{'url': ytResult[index].id});
+
+
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 7.0),
