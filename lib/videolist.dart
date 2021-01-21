@@ -6,8 +6,8 @@ import 'playview.dart';
 class videolist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: listview(),
+    return Scaffold(
+      body: listview(),
     );
   }
 }
