@@ -3,9 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'videolist.dart';
-
-void main() => runApp(MaterialApp(home: FirstRoute()));
-
 class FirstRoute extends StatefulWidget {
   @override
   _FirstRoute createState() => _FirstRoute();
@@ -16,15 +13,13 @@ class _FirstRoute extends State<FirstRoute> {
   void initState() {
     super.initState();
     new Future.delayed(const Duration(seconds: 3), () {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => videolist()));
+      Navigator.pushNamed(context, '/list');
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
           backgroundColor: Colors.red,
           body: Container(
               alignment: Alignment.bottomCenter,
@@ -45,7 +40,7 @@ class _FirstRoute extends State<FirstRoute> {
                     )
                   ],
                 ),
-              ))), //<- place where the image appears
+              )), //<- place where the image appears
     );
   }
 }

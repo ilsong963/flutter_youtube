@@ -3,18 +3,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_api/youtube_api.dart';
 import 'playview.dart';
 
-class videolist extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: <String, WidgetBuilder>{
-        '/settings': (BuildContext context) => new listview(),
-      },
-      home: listview(),
-    );
-  }
-}
-
 class listview extends StatefulWidget {
   @override
   _listview createState() => _listview();
@@ -110,8 +98,7 @@ class _listview extends State<listview> {
       onTap: () {
         print("!111"+ytResult[index].id);
           Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => YoutubeApp(url : ytResult[index].id)),
+            context, MaterialPageRoute(builder: (context) => YoutubeAppDemo(url : ytResult[index].id)),
           );
       },
       child: Container(

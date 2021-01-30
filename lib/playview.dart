@@ -9,29 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
-///
-class YoutubeApp extends StatelessWidget {
-  final String url;
 
-  // 생성자는 Todo를 인자로 받습니다.
-  YoutubeApp({Key key, @required this.url}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    print("!!!"+url);
-    return MaterialApp(
-      title: 'Youtube Player IFrame Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        iconTheme: const IconThemeData(color: Colors.deepPurpleAccent),
-      ),
-      debugShowCheckedModeBanner: false,
-      home: YoutubeAppDemo(url: url),
-    );
-  }
-}
-
-///
 class YoutubeAppDemo extends StatefulWidget {
   final String url;
   const YoutubeAppDemo ({ Key key, this.url }): super(key: key);
@@ -53,7 +31,7 @@ class _YoutubeAppDemoState extends State<YoutubeAppDemo> {
         showControls: true,
         showFullscreenButton: true,
         desktopMode: true,
-        privacyEnhanced: true,
+       // privacyEnhanced: true,
       ),
     );
     _controller.onEnterFullscreen = () {
@@ -107,7 +85,8 @@ class _YoutubeAppDemoState extends State<YoutubeAppDemo> {
                 const Controls(),
                 RaisedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/list');
+                    print("!!");
                   },
                 )
               ],
