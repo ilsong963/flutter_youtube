@@ -3,51 +3,56 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_api/youtube_api.dart';
 import 'playview.dart';
 
-class videolist extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: listview(),
-    );
-  }
-}
-
 class listview extends StatefulWidget {
   @override
   _listview createState() => _listview();
 }
 
 class _listview extends State<listview> {
-
+  static int maxResult = 50;
   static String key = "AIzaSyCoHKFaTeaTgeZvbSI9UexIVlWZcH-HYhc";
   final FocusNode textfield = FocusNode();
-  YoutubeAPI ytApi = YoutubeAPI(key, type: "video");
+  YoutubeAPI ytApi = YoutubeAPI(key, type: "video", maxResults: maxResult);
   List<YT_API> ytResult = [];
   bool isclick = false;
   bool isLoading = false;
   final searchController = TextEditingController();
+  String regionCode = 'KR';
+
+  String query = "Java";
 
   callAPI() async {
-    String query = "Java";
-
     setState(() {
       isLoading = true;
     });
+
+    ytResult = await ytApi.getTrends(regionCode: regionCode);
     isLoading = true;
     ytResult = await ytApi.search(query);
+    //ytResult = await ytApi.nextPage();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void loadYoutube() async {
+    setState(() {
+      isLoading = true;
+    });
     ytResult = await ytApi.nextPage();
     setState(() {
       isLoading = false;
     });
   }
 
-  void searchYoutube(String query) async {
-    print(query);
+  void searchYoutube(String searh) async {
+    query = searh;
+    print(searh);
     setState(() {
       isLoading = true;
     });
     ytResult = await ytApi.search(query);
-    ytResult = await ytApi.nextPage();
+    //ytResult = await ytApi.nextPage();
     setState(() {
       isLoading = false;
     });
@@ -61,9 +66,9 @@ class _listview extends State<listview> {
 
   @override
   Widget build(BuildContext context) {
-    final YoutubeApp args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Text("Youtube"),
           backgroundColor: Colors.red,
           actions: <Widget>[
@@ -92,10 +97,7 @@ class _listview extends State<listview> {
         ),
         body: !isLoading
             ? Container(
-                child: ListView.builder(
-                  itemCount: ytResult.length,
-                  itemBuilder: (_, int index) => listItem(index),
-                ),
+                child: _buildList(context)
               )
             : Center(
                 child: CircularProgressIndicator(
@@ -103,17 +105,30 @@ class _listview extends State<listview> {
               )));
   }
 
+  Widget _buildList(BuildContext context) {
+    return ListView.builder(
+        itemCount: ytResult.length,
+        itemBuilder: (context, i) {
+          print("i : " + i.toString());
+          if(i == maxResult-1 ){
+            setState(() {
+              loadYoutube();
+            });
+          }
+          return listItem(i);
+        });
+  }
+
   Widget listItem(index) {
     return Card(
         child: new InkWell(
       onTap: () {
-        print("!111"+ytResult[index].id);
-
-
-        Navigator.pushNamed(
-            context,'/view',arguments:{'url': ytResult[index].id});
-
-
+        print("!111" + ytResult[index].id);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => YoutubeAppDemo(url: ytResult[index].id)),
+        );
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 7.0),

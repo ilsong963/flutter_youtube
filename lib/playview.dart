@@ -8,31 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-import 'videolist.dart';
 
-///
-class YoutubeApp extends StatelessWidget {
 
-  @override
-  Widget build(BuildContext context) {
-    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-
-    if (arguments != null) print(arguments['exampleArgument']);
-
-    print("!!!"+arguments['exampleArgument']);
-    return MaterialApp(
-      title: 'Youtube Player IFrame Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        iconTheme: const IconThemeData(color: Colors.deepPurpleAccent),
-      ),
-      debugShowCheckedModeBanner: false,
-      home: YoutubeAppDemo(url: arguments['exampleArgument']),
-    );
-  }
-}
-
-///
 class YoutubeAppDemo extends StatefulWidget {
   final String url;
   const YoutubeAppDemo ({ Key key, this.url }): super(key: key);
@@ -54,7 +31,7 @@ class _YoutubeAppDemoState extends State<YoutubeAppDemo> {
         showControls: true,
         showFullscreenButton: true,
         desktopMode: true,
-        privacyEnhanced: true,
+       // privacyEnhanced: true,
       ),
     );
     _controller.onEnterFullscreen = () {
@@ -84,7 +61,8 @@ class _YoutubeAppDemoState extends State<YoutubeAppDemo> {
       controller: _controller,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Youtube Player Demo'),
+          backgroundColor: Colors.red,
+          title: const Text('Youtube'),
         ),
         body: LayoutBuilder(
           builder: (context, constraints) {
@@ -106,12 +84,7 @@ class _YoutubeAppDemoState extends State<YoutubeAppDemo> {
               children: [
                 player,
                 const Controls(),
-                RaisedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(
-                        context,'/list');
-                  },
-                )
+
               ],
             );
           },
