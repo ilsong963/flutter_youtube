@@ -9,7 +9,7 @@ class listview extends StatefulWidget {
 }
 
 class _listview extends State<listview> {
-  static int maxResult = 50;
+  static int maxResult = 10;
   static String key = "AIzaSyCoHKFaTeaTgeZvbSI9UexIVlWZcH-HYhc";
   final FocusNode textfield = FocusNode();
   YoutubeAPI ytApi = YoutubeAPI(key, type: "video", maxResults: maxResult);
@@ -107,17 +107,22 @@ class _listview extends State<listview> {
 
   Widget _buildList(BuildContext context) {
     return ListView.builder(
-        itemCount: ytResult.length,
+        padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, i) {
-          print("i : " + i.toString());
-          if(i == maxResult-1 ){
-            setState(() {
-              loadYoutube();
-            });
+
+          // 홀수 행은 구분자를 넣어준다.
+          final index = i ~/ 2; // i를 2로 나누었을때, 결과의 정수부분을 반환한다.
+          print(index);
+          if (index >= ytResult.length) {
+            print("!!");
+            // 가지고 있는 문자열을 모두 소진하면, 10개를 더 불러온다.
+            loadYoutube();
           }
-          return listItem(i);
+          return listItem(index);
         });
   }
+
+
 
   Widget listItem(index) {
     return Card(
